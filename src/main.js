@@ -5,8 +5,6 @@ import renderImages from './js/render-functions';
 import { infoAPI } from './js/pizsbay-api';
 
 const form = document.querySelector('.js-form');
-const input = document.querySelector('.js-input');
-const buttom = document.querySelector('.js-button');
 const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
 const loadMore = document.querySelector('.js-load-more');
@@ -23,6 +21,7 @@ async function creatGallery(event) {
   loader.removeAttribute('hidden');
   gallery.innerHTML = '';
   if (infoSearch) {
+    newInfoApi.page = 1;
     newInfoApi.query = infoSearch;
     const data = await newInfoApi.getInfoArticles(infoSearch);
     renderImages(data.hits);
@@ -41,6 +40,14 @@ async function addNewInfo() {
     newInfoApi.page += 1;
     const data = await newInfoApi.getInfoArticles();
     renderImages(data.hits);
+
+    const heightElement = document.querySelector('.gallery-item');
+    const height = heightElement.getBoundingClientRect();
+
+    window.scrollBy({
+      top: height.width * 2,
+      behavior: 'smooth',
+    });
   } else {
   }
 }
