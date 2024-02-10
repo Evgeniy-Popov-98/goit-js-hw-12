@@ -22,6 +22,19 @@
   -webkit-text-size-adjust: 100%;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
 .loader {
   transform: rotateZ(45deg);
   perspective: 1000px;
@@ -158,6 +171,10 @@
 }
 
 .container-gallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .gallery {
@@ -221,4 +238,24 @@
   line-height: 2;
   letter-spacing: 0.04em;
   color: #2e2f42;
+}
+
+.button-load-more {
+  margin: 30px 0;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  height: 40px;
+  background-color: hsl(227, 100%, 65%);
+
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #fff;
+  outline-color: #6c8cff;
+}
+
+.button-load-more:hover {
+  background-color: #6c8cff;
 }

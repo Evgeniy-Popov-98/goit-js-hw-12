@@ -9,31 +9,24 @@ const input = document.querySelector('.js-input');
 const buttom = document.querySelector('.js-button');
 const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
+const loadMore = document.querySelector('.js-load-more');
 
 const newInfoApi = new infoAPI();
 
 form.addEventListener('submit', creatGallery);
+loadMore.addEventListener('click', addNewInfo);
 
-function creatGallery(event) {
+async function creatGallery(event) {
   event.preventDefault();
   const infoSearch = form.elements.text.value.trim();
   form.elements.text.value = '';
   loader.removeAttribute('hidden');
-  removeGallery();
+  gallery.innerHTML = '';
   if (infoSearch) {
-    // loader.setAttribute('hidden', '');
-
-    try {
-      console.log(infoSearch);
-      const data = newInfoApi.getInfoArticles(infoSearch);
-      //   console.log(data);
-      //   renderImages(data.hits);
-    } catch (error) {
-      iziToast.error({
-        title: 'Error',
-        message: err.message,
-      });
-    }
+    newInfoApi.query = infoSearch;
+    const data = await newInfoApi.getInfoArticles(infoSearch);
+    renderImages(data.hits);
+    loadMore.classList.remove('visually-hidden');
   } else {
     iziToast.error({
       position: 'topRight',
@@ -43,35 +36,11 @@ function creatGallery(event) {
   }
 }
 
-function removeGallery() {
-  const galleryItem = document.querySelectorAll('.gallery-item');
-  for (let i = 0; i < galleryItem.length; i++) {
-    galleryItem[i].remove();
+async function addNewInfo() {
+  if (true) {
+    newInfoApi.page += 1;
+    const data = await newInfoApi.getInfoArticles();
+    renderImages(data.hits);
+  } else {
   }
 }
-
-// function getImages(infoSearch) {
-//   const url = `https://pixabay.com/api/?key=42169950-0e8cca4ed1d3fcef898dec13a&q=${infoSearch}&image_type=photo&orientation=horizontal&safesearch=true`;
-
-//   return fetch(url)
-//     .then(res => {
-//       if (res.ok) {
-//         return res.json();
-//       } else {
-//         const myError = new Error(`${res.status}`);
-//         throw myError;
-//       }
-//     })
-//     .then(resolt => {
-//       if (resolt.hits.length !== 0) {
-//         renderImages(resolt.hits);
-//       } else {
-//         iziToast.error({
-//           position: 'topRight',
-//           message:
-//             'Sorry, there are no images matching your search query. Please try again!',
-//         });
-//       }
-//     })
-//     .catch(err => console.log(err.message));
-// }
