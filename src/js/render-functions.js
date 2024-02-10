@@ -5,7 +5,7 @@ const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
 
 export default function renderImages(images) {
-  loader.setAttribute('hidden', '');
+  loader.classList.add('visually-hidden');
   const markup = images
     .map(img => {
       return `<li class="gallery-item">

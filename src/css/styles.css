@@ -49,8 +49,8 @@
   content: '';
   display: block;
   position: absolute;
-  top: 50vh;
-  left: 50vw;
+  top: 5vh;
+  left: 5vw;
   width: inherit;
   height: inherit;
   border-radius: 50%;
@@ -167,9 +167,6 @@
   background-color: #6c8cff;
 }
 
-.section-gallery {
-}
-
 .container-gallery {
   display: flex;
   flex-direction: column;
@@ -188,9 +185,6 @@
   width: 360px;
   height: 200px;
   border: 1px solid #808080;
-}
-
-.gallery-link {
 }
 
 .gallery-image {

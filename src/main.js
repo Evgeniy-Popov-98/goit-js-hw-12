@@ -10,6 +10,7 @@ const loader = document.querySelector('.loader');
 const loadMore = document.querySelector('.js-load-more');
 
 const newInfoApi = new infoAPI();
+let checkLastHits = 0;
 
 form.addEventListener('submit', creatGallery);
 loadMore.addEventListener('click', addNewInfo);
@@ -18,14 +19,28 @@ async function creatGallery(event) {
   event.preventDefault();
   const infoSearch = form.elements.text.value.trim();
   form.elements.text.value = '';
-  loader.removeAttribute('hidden');
   gallery.innerHTML = '';
+
+  loadMore.classList.add('visually-hidden');
+  loader.classList.remove('visually-hidden');
+
   if (infoSearch) {
     newInfoApi.page = 1;
     newInfoApi.query = infoSearch;
-    const data = await newInfoApi.getInfoArticles(infoSearch);
-    renderImages(data.hits);
-    loadMore.classList.remove('visually-hidden');
+
+    try {
+      const data = await newInfoApi.getInfoArticles(infoSearch);
+      checkLastHits = Math.ceil(data.totalHits / infoAPI.PAGE_SIZE);
+      renderImages(data.hits);
+      loadMore.classList.remove('visually-hidden');
+    } catch {
+      loadMore.classList.add('visually-hidden');
+      iziToast.error({
+        position: 'topRight',
+        message:
+          'Sorry, there are no images matching your search query. Please try again!',
+      });
+    }
   } else {
     iziToast.error({
       position: 'topRight',
@@ -36,7 +51,11 @@ async function creatGallery(event) {
 }
 
 async function addNewInfo() {
-  if (true) {
+  loader.classList.remove('visually-hidden');
+  loadMore.classList.add('visually-hidden');
+
+  if (newInfoApi.page < checkLastHits) {
+    loadMore.classList.remove('visually-hidden');
     newInfoApi.page += 1;
     const data = await newInfoApi.getInfoArticles();
     renderImages(data.hits);
@@ -45,9 +64,16 @@ async function addNewInfo() {
     const height = heightElement.getBoundingClientRect();
 
     window.scrollBy({
-      top: height.width * 2,
+      top: height.height * 2,
       behavior: 'smooth',
     });
-  } else {
+  }
+
+  if (newInfoApi.page === checkLastHits) {
+    loadMore.classList.add('visually-hidden');
+    iziToast.info({
+      position: 'topRight',
+      message: `We're sorry, but you've reached the end of search results.`,
+    });
   }
 }

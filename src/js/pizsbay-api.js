@@ -20,10 +20,10 @@ export class infoAPI {
       page: this.page,
     };
     return await axios.get(`${this.BASE_URL}`, { params }).then(res => {
-      try {
+      if (res.data.hits.length === 0) {
+        throw new Error('Error');
+      } else {
         return res.data;
-      } catch {
-        console.log(Error.message);
       }
     });
   }
